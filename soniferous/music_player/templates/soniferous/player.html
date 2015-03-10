@@ -1,0 +1,45 @@
+{% extends 'soniferous/base-page.html' %}
+{% load staticfiles %}
+{% block javascript %}
+<script type="text/javascript" src="{% static 'soniferous/js/interface.js' %}"></script>
+<script type="text/javascript" src="{% static 'soniferous/js/music-player.js' %}"></script>
+{% endblock javascript %}
+{% block body %}
+{% include 'soniferous/menu-bar.html' %}
+<main class="player">
+  <nav id="audio-nav">
+    <div id="song-info">
+      <span id="current-song"></span>
+      <span id="current-album"></span>
+      <span id="current-artist"></span>
+    </div>
+    <div id="audio-controls">
+      <audio id="audio-player" preload="none"></audio>
+      <input id="search-bar" name="search-field" type="text" />
+      <button id="next-button"></button>
+      <button id="play-button"></button>
+      <button id="previous-button"></button>
+    </div>
+    <ul id="view-selector">
+      <li id="view-songs">Songs</li>
+      <li id="view-albums">Albums</li>
+      <li id="view-artists">Artists</li>
+    </ul>
+  </nav>
+  <ul id="album-list">
+  </ul>
+  <ul id="artist-list">
+  </ul>
+  <ul id="song-list">
+  {% for song in songs %}
+    <li data-song_id="{{ song.id }}">
+      <span>{{ song.title }}</span>
+      <span>{{ song.album.album }}</span>
+      <span>{{ song.album.artist.artist }}</span>
+      <span>{{ song.time }}</span>
+    </li>
+  {% endfor %}
+  </ul>
+</main>
+
+{% endblock body %}

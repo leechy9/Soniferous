@@ -1,0 +1,14 @@
+{% block menu_bar %}
+<nav id="menu-bar">
+  <h1><a href="{% url 'soniferous:player' %}">Soniferous</a></h1>
+  <div id="user-menu">
+    <ul>
+      {% if user.is_superuser %}
+      <li><a href="{% url 'admin:index' %}" target="_blank">Admin</a></li>
+      {% endif %}
+      <li><a href="{% url 'soniferous:password' %}">Change Password</a></li>
+      <li><a href="{% url 'soniferous:logout' %}">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+{% endblock menu_bar %}

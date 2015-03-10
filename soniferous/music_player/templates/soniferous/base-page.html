@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+    <title>{% block title %}Soniferous{% endblock title %}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    {% block style %}
+    <link rel="stylesheet" media="(max-width: 600px)" href="{% static 'soniferous/style/max-600px.css' %}" />
+    <link rel="stylesheet" media="(min-width: 601px)" href="{% static 'soniferous/style/min-601px.css' %}" />
+    <link rel="stylesheet" href="{% static 'soniferous/style/soniferous.css' %}" />
+    {% endblock style%}
+    {% block javascript %} {% endblock javascript %}
+  </head>
+  <body>
+    {% block body %} {% endblock body %}
+  </body>
+</html>

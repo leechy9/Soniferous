@@ -1,0 +1,12 @@
+# Ensure that static and personal data is ignored #
+/soniferous/soniferous/secret_key.py
+/soniferous/static
+/soniferous/uploaded_music
+
+# Sqlite3 Databases #
+*.sl3
+*.sqlite3
+
+# Python auto-generated #
+__pycache__/
+*.pyc

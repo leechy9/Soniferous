@@ -1,0 +1,20 @@
+{% extends 'soniferous/base-page.html' %}
+{% block body %}
+{% include 'soniferous/menu-bar.html' %}
+<main>
+  <div class="form-container">
+    <h1>Upload Song</h1>
+    {% if error %}
+    <p class="error-msg">{{ error }}</p>
+    {% endif %}
+    <form action="{% url 'soniferous:song_upload' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label for="music_file">Select MP3:</label>
+      <input id="music_file" type="file" accept="audio/*" name="music_file" />
+      <input type="submit" value="Upload" />
+    </form>
+    <a href="{% url 'soniferous:player' %}">Return to player</a>
+  </div>
+</main>
+
+{% endblock body %}

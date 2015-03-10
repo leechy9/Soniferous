@@ -1,0 +1,91 @@
+@media (max-width: 600px) {
+  #audio-controls {
+    left: 0;
+    overflow: hidden;
+    padding: 10px;
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+  }
+  #audio-nav {
+    height: 240px;
+    z-index: 0;
+  }
+  #site-login {
+    border: none;
+  }
+  #song-info {
+    left: 12px;
+    position: absolute;
+    right: 12px;
+    top: 12px;
+  }
+  #song-info > span {
+    height: 24px;
+    width: 90%;
+  }
+  .force-display {
+    display: inline !important;
+  }
+  .form-container {
+    background-color: #fff;
+    font-size: 12px;
+    min-height: 400px;
+    padding: 4px;
+  }
+  .form-container form {
+    text-align: right;
+    width: 300px;
+  }
+  .form-container input {
+    display: inline-block;
+    margin-bottom: 12px;
+    width: 200px;
+  }
+  .form-container label {
+    display: inline-block;
+    margin-bottom: 12px;
+    width: 90px;
+  }
+  .player {
+    z-index: 1;
+  }
+  .player > ul > li {
+    display: block;
+    height: 50px;
+    width: 100%;
+  }
+  .player > ul > li > span {
+    font-size: 14px;
+    height: 25px;
+    line-height: 25px;
+    position: absolute;
+  }
+  .player > ul > li > span:nth-child(1) {
+    color: #333;
+    font-size: 18px;
+    left: 10px;
+    top: 4px;
+    width: 70%;
+  }
+  .player > ul > li > span:nth-child(2) {
+    color: #777;
+    bottom: 0px;
+    left: 10px;
+    width: 50%;
+  }
+  .player > ul > li > span:nth-child(3) {
+    color: #777;
+    bottom: 0px;
+    right: 10px;
+    text-align: right;
+    width: 50%;
+  }
+  .player > ul > li > span:nth-child(4) {
+    color: #333;
+    right: 10px;
+    text-align: right;
+    top: 4px;
+    width: 20%;
+  }
+}

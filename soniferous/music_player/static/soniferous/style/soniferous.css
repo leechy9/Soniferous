@@ -1,0 +1,276 @@
+@font-face {
+  font-family: "Lobster";
+  src: url('../fonts/Lobster.woff');
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  background-color: #2f4c57;
+  color: #333;
+  font: 14px/16px helvetica;
+}
+body {
+  margin: 0 auto;
+  /*max-width: 1000px;*/
+  width: 100%;
+}
+main {
+  background-color: #fff;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+ul {
+  list-style-type: none;
+}
+/* IDs */
+#audio-controls > button {
+  background-color: #fff;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+  float: right;
+  height: 40px;
+  transition: background-color 0.5s;
+}
+#audio-controls > button:hover {
+  background-color: #eee;
+  transition: background-color 0.5s;
+}
+#audio-nav {
+  background-color: #333;
+  color: #fff;
+  height: 200px;
+  max-width: 1000px;
+  position: fixed;
+  top: 40px;
+  width: 100%;
+}
+#menu-bar {
+  background-color: #222;
+  color: #fff;
+  height: 40px;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+#menu-bar > h1 {
+  font: 30px/34px "Lobster";
+  font-weight: normal;
+  margin: 0 12px;
+}
+#menu-bar a{
+  color: #fff;
+  text-decoration: none;
+}
+#menu-bar a:hover{
+  color: #ddd;
+}
+#next-button {
+  background-image: url('../images/next.svg');
+  border-left: solid #ddd 1px;
+  border-right: solid #ddd 1px;
+  width: 40px;
+}
+#play-button {
+  background-image: url('../images/play.svg');
+  width: 40px;
+}
+#previous-button {
+  background-image: url('../images/previous.svg');
+  border-radius: 8px 0 0 8px;
+  border-right: solid #ddd 1px;
+  width: 40px;
+}
+#search-bar {
+  background-color: #fff;
+  background-image: url('../images/search.svg');
+  background-position: center right;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: solid #fff 0px;
+  border-radius: 0 8px 8px 0;
+  color: #333;
+  cursor: pointer;
+  float: right;
+  height: 40px;
+  outline: none;
+  padding: 4px 40px 4px 0px;
+  transition: background-color 0.5s, width 0.5s;
+  width: 40px;
+}
+#search-bar:focus {
+  padding: 4px 40px 4px 8px;
+  transition: background-color 0.5s, width 0.5s;
+  width: calc(100% - 140px);
+}
+#search-bar:hover {
+  background-color: #eee;
+  transition: background-color 0.5s, width 0.5s;
+}
+#song-info {
+  color: #fff;
+  cursor: default;
+  overflow: hidden;
+}
+#song-info > span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 90%;
+}
+#song-info > span:first-child {
+  font-size: 18px;
+  font-weight: bold;
+  height: 24px;
+}
+#site-login {
+  background-color: transparent;
+  color: #fff;
+  margin: 100px auto;
+  max-width: 320px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+#site-login > h1{
+  font: 72px/96px "Lobster";
+  text-shadow: #84B4C7 3px 3px 0;
+}
+#site-login > form {
+  text-align: center;
+}
+#site-login > form > input {
+  background-color: #fff;
+  border: 2px solid #444;
+  border-radius: 10px;
+  color: #555;
+  font-size: 16px;
+  height: 40px;
+  margin: 10px 0 0;
+  outline: none;
+  padding: 8px;
+  width: 80%;
+}
+#site-login > form > input:focus {
+  background-color: #caeaf7;
+  transition: background 0.5s;
+}
+#site-login > form > input[type="submit"] {
+  font-weight: bold;
+}
+#user-menu {
+  background-image: url('../images/menu.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  display: inline-block;
+  height: 40px;
+  right: 0;
+  position: absolute;
+  top: 0;
+  width: 40px;
+}
+#user-menu > ul {
+  background-color: #444;
+  display: block;
+  font-size: 20px;
+  line-height: 40px;
+  position: absolute;
+  text-align: right;
+  right: 0;
+  top: 40px;
+  width: 180px;
+  visibility: hidden;
+  z-index: 2;
+}
+#user-menu:focus > ul,
+#user-menu:hover > ul {
+  visibility: visible;
+}
+#user-menu a{
+  color: #fff;
+  display: block;
+  height: 40px;
+  padding: 0 8px;
+  text-decoration: none;
+  width: 100%;
+}
+#user-menu a:hover{
+  background-color: #555;
+}
+#view-selector {
+  bottom: 0;
+  color: #fff;
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 100%;
+}
+#view-selector > li {
+  background-color: #444;
+  cursor: pointer;
+  display: block;
+  float: left;
+  font-size: 16px;
+  height: 100%;
+  margin: 0 0 0 1%;
+  transition: background-color 0.5s;
+  vertical-align: middle;
+  width: 32%;
+}
+#view-selector > li:hover,
+#view-selector > li:focus {
+  background-color: #555;
+  transition: background-color 0.5s;
+}
+.errorlist,
+.error-msg {
+  color: #f00;
+  margin: 0 0 12px 0;
+}
+.form-container {
+  padding: 50px 12px 12px;
+}
+.form-container h1 {
+  margin: 10px 0;
+}
+.hidden {
+  display: none !important;
+}
+.player > ul {
+  max-width: 1000px;
+  position: absolute;
+  top: 240px;
+  width: 100%;
+}
+.player > ul > li {
+  cursor: pointer;
+  display: block;
+  position: relative;
+}
+.player > ul > li:nth-child(even) {
+  background-color: #eee;
+}
+.player > ul > li:nth-child(odd) {
+  background-color: #fff;
+}
+.player > ul > li > span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.selected-song {
+  background-color: #caeaf7 !important;
+}

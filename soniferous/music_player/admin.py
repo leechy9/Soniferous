@@ -8,7 +8,7 @@ class SongAdmin(admin.ModelAdmin):
   Change model: Displays text fields to modify existing data.
   '''
   list_display = ('title', 'album_', 'artist_',)
-  ordering = ('album__album', 'album__artist__artist', 'track_number', 'title',)
+  ordering = ('album__artist__artist', 'album__album', 'track_number', 'title',)
   def album_(self, song):
     return song.album.album
   def artist_(self, song):

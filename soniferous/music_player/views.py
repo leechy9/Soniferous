@@ -27,14 +27,12 @@ def file_range_generator(field_file, block_size, start, stop):
   Yield: The current chunk of bytes to serve
   '''
   field_file.seek(start)
-  position = start
-  while(start <= position <= stop):
-    if position + block_size <= stop:
-      chunk_size = block_size
-    else:
-      chunk_size = stop - position + 1
-    position += chunk_size
-    yield field_file.read(chunk_size)
+  remaining = stop - start + 1
+  while remaining > 0:
+    if remaining < block_size:
+      block_size = remaining
+    yield field_file.read(block_size)
+    remaining -= block_size
 
 ########################
 # Misc Views

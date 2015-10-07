@@ -81,6 +81,9 @@ ul {
   background-image: url('../images/play.svg');
   width: 40px;
 }
+#play-button.pause-button {
+  background-image: url('../images/pause.svg');
+}
 #previous-button {
   background-image: url('../images/previous.svg');
   border-radius: 8px 0 0 8px;

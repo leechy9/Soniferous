@@ -1,11 +1,23 @@
 {% extends 'soniferous/base-page.html' %}
 {% load staticfiles %}
 {% block javascript %}
-<script type="text/javascript" src="{% static 'soniferous/js/interface.js' %}"></script>
+<script type="text/javascript" src="{% static 'soniferous/js/lib/zepto-min.js' %}"></script>
+<script type="text/javascript" src="{% static 'soniferous/js/lib/underscore-min.js' %}"></script>
+<script type="text/javascript" src="{% static 'soniferous/js/lib/backbone-min.js' %}"></script>
 <script type="text/javascript" src="{% static 'soniferous/js/music-player.js' %}"></script>
 {% endblock javascript %}
 {% block body %}
 {% include 'soniferous/menu-bar.html' %}
+
+{% autoescape off %}
+<script type="text/template" id="song-template">
+  <span><%= title %></span>
+  <span><%= artist %></span>
+  <span><%= album %></span>
+  <span><%= time %></span>
+</script>
+{% endautoescape %}
+
 <main class="player">
   <nav id="audio-nav">
     <div id="song-info">
@@ -31,14 +43,6 @@
   <ul id="artist-list">
   </ul>
   <ul id="song-list">
-  {% for song in songs %}
-    <li data-song_id="{{ song.id }}">
-      <span>{{ song.title }}</span>
-      <span>{{ song.album.album }}</span>
-      <span>{{ song.album.artist.artist }}</span>
-      <span>{{ song.time }}</span>
-    </li>
-  {% endfor %}
   </ul>
 </main>
 

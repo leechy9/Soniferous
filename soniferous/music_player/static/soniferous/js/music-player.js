@@ -1,152 +1,241 @@
-
 /**
- * Creates a new music player instance.
- * The music player listens for button presses on its controls and plays
- * music accordingly.
- * @return
- *  MusicPlayer, The music player instance.
+ * Begin the music player application after the page has loaded all resources.
+ * Wrap in a namespace to prevent global namespace conflicts.
  */
-function createMusicPlayer() {
-  var ns = {};
-  var $ = function(q){ return document.querySelector(q); };
+$(document).ready(function(){
 
- /**
-  * Sets the current song information to the info from the li given.
-  */
-  ns.updateSongDisplay = function(){
-    if(ns.currentSong){
-      var temp = ns.currentSong.children;
-      $('#current-song').textContent = temp[0].textContent;
-      $('#current-album').textContent = temp[1].textContent;
-      $('#current-artist').textContent = temp[2].textContent;
-    }
-  };
+  var songUrlBase = 'song/';
 
   /**
-   * Sets the current song to the li given.
+   * Song model. Used to represent a track that can be played
+   * within the music player.
    */
-  ns.updateCurrentSong = function(li){
-    var song_id;
-    if(li){
-      song_id = li.getAttribute('data-song_id');
-      ns.currentSong.classList.remove('selected-song');
-      ns.currentSong = li;
-      ns.updateSongDisplay();
-      ns.setPlayerSource(song_id);
-      ns.setPlaying(false);
-      ns.currentSong.classList.add('selected-song');
-    }
-  };
+  var Song = Backbone.Model.extend({
+    defaults: function(){
+      return {
+       'isPlaying': false,
+       'title': 'Unknown Title',
+       'track_number': '0',
+       'time': '0:00',
+       'album': 'Unknown Album',
+       'artist': 'Unknown Artist',
+      };
+    },
+  });
 
   /**
-   * Sets the player's source to the specified song.
-   * @param song_id
-   *  The string song_id for the player to play.
+   * A collection of songs with options to sort.
    */
-  ns.setPlayerSource = function(song_id){
-    var audioPlayer = $('#audio-player');
-    audioPlayer.src = 'song/' + song_id + '/audio';
-  };
+  var SongList = Backbone.Collection.extend({
+    url: songUrlBase,
+    model: Song,
+    parse: function(songObject) { return songObject.songs; },
+    /**
+     * Sorts songs by artist, album, track_number, and title.
+     */
+    comparator: function(song){
+      return [
+       song.get('artist'),
+       song.get('album'),
+       song.get('track_number'),
+       song.get('title')
+      ];
+    },
+  });
+
 
   /**
-   * Selects the next song in the list. Loops back to beginning.
+   * Handles displaying a single song on screen and listens for events.
    */
-  ns.nextSong = function(){
-    if(ns.currentSong){
-      ns.currentSong.classList.remove('selected-song');
-      ns.currentSong = ns.currentSong.nextElementSibling;
-      if(!ns.currentSong) ns.currentSong = $('#song-list').firstElementChild;
-      ns.currentSong.classList.add('selected-song');
-    }
-  };
+  var SongView = Backbone.View.extend({
+    tagName: 'li',
+    template: _.template($('#song-template').html()),
+    events: {
+      'add': 'render',
+      'click': 'select',
+    },
+    initialize: function(){
+      this.listenTo(this.model, 'change:isPlaying',
+       _.bind(this.updatePlaying, this));
+    },
+    render: function(){
+      this.$el.html(this.template(this.model.toJSON()));
+      return this;
+    },
+    updatePlaying: function(song, isPlaying){
+      if(isPlaying) this.$el.addClass('selected-song');
+      else this.$el.removeClass('selected-song');
+    },
+    select: function(){
+      this.model.trigger('play', this.model);
+    },
+    remove: function(){
+      this.el.parentNode.removeChild(this.el);
+    },
+  });
 
+  
   /**
-   * Selects the previous song in the list. Loops back to end.
+   * Handles the main user interface and is the driver for the music player.
    */
-  ns.previousSong = function(){
-    if(ns.currentSong){
-      ns.currentSong.classList.remove('selected-song');
-      ns.currentSong = ns.currentSong.previousElementSibling;
-      if(!ns.currentSong) ns.currentSong = $('#song-list').lastElementChild;
-      ns.currentSong.classList.add('selected-song');
-    }
-  };
+  var MusicPlayerView = Backbone.View.extend({
+    el: $('#audio-nav'),
+    events: {
+      'click #view-songs': 'viewSongs',
+      'click #view-albums': 'viewAlbums',
+      'click #view-artists': 'viewArtists',
+      'click #play-button': 'togglePause',
+      'click #next-button': 'playNextSong',
+      'click #previous-button': 'playPreviousSong',
+    },
 
-  /**
-   * Plays the next song in the song-list.
-   */
-  ns.nextPressed = function(){
-    var audioPlayer = $('#audio-player');
-    audioPlayer.pause();
-    ns.nextSong();
-    ns.updateSongDisplay();
-    ns.setPlayerSource(ns.currentSong.getAttribute('data-song_id'));
-    if(ns.isPlaying) audioPlayer.play();
-  };
+    /**
+     * Handle what to do during the launch of the application.
+     */
+    initialize: function(){
+      this.currentSong = -1;
+      this.audioPlayer = $('#audio-player').get(0);
+      // Play the next song in the list when the current playing song ends.
+      this.audioPlayer.addEventListener('ended',
+       _.bind(this.playNextSong, this));
+      // The listing of all songs.
+      this.songList = new SongList();
+      // The current playlist of songs to loop through
+      this.playList = null;
+      // The songs to display in the current view
+      this.displayList = new SongList();
+      // Performed after the list of songs has been fetched.
+      var successCallback = _.bind(function(collection){
+        this.listenTo(this.displayList, 'reset', this.displaySongs);
+        this.displayList.reset(collection.models);
+        this.playList = collection.clone();
+        this.listenTo(this.playList, 'play', this.playSong);
+      }, this);
+      // Fetch the list of songs.
+      this.songList.fetch({success: successCallback});
+    },
 
-  /**
-   * Plays the previous song in the song-list.
-   */
-  ns.previousPressed = function(){
-    var audioPlayer = $('#audio-player');
-    audioPlayer.pause();
-    ns.previousSong();
-    ns.updateSongDisplay();
-    ns.setPlayerSource(ns.currentSong.getAttribute('data-song_id'));
-    if(ns.isPlaying) audioPlayer.play();
-  };
+    /**
+     * Pauses the audio if already playing and plays audio if already paused.
+     * Has a special case to handle when first song has been played.
+     */
+    togglePause: function(){
+      if(this.currentSong == -1){
+        this.currentSong = 0;
+        this.playSong(this.playList.at(this.currentSong));
+      }
+      else if(this.audioPlayer.paused)
+        this.audioPlayer.play();
+      else
+        this.audioPlayer.pause();
+      this.updatePlayButton();
+    },
 
-  /**
-   * Sets the player's state to playing music.
-   * @param state
-   *  The state that the player should be put into.
-   */
-  ns.setPlaying = function(state){
-    if(state){
-      ns.isPlaying = true;
-      $('#audio-player').play();
-      $('#play-button').style.backgroundImage = "url('static/soniferous/images/pause.svg')";
-    }
-    else{
-      ns.isPlaying = false;
-      $('#audio-player').pause();
-      $('#play-button').style.backgroundImage = "url('static/soniferous/images/play.svg')";
-    }
-  };
+    /**
+     * Sets the play button to match the status of the audio player.
+     */
+    updatePlayButton: function(){
+      if(this.audioPlayer.paused)
+        $('#play-button').removeClass('pause-button');
+      else
+        $('#play-button').addClass('pause-button');
+    },
 
-  /**
-   * Toggles the play/pause state of the music player on button press.
-   */
-  ns.playPressed = function(){
-    ns.setPlaying(!ns.isPlaying);
-  };
+    /**
+     * Plays the previous song in the playlist.
+     * Wraps around to last song if at start of list when this is called.
+     */
+    playPreviousSong: function(){
+      // Handle calls before any song has been queued.
+      if(this.currentSong == -1)
+        return
+      var previousSong = this.currentSong - 1;
+      if(previousSong < 0)
+        previousSong = this.playList.length - 1;
+      this.playSong(this.playList.at(previousSong));
+    },
 
-  /**
-   * Handles the selection of a new song when the current song ends.
-   */
-  ns.songEnded = function(){
-    ns.nextPressed();
-  };
+    /**
+     * Plays the next song in the playlist.
+     * Wraps around to first song if at end of list when this is called.
+     */
+    playNextSong: function(){
+      // Handle calls before any song has been queued.
+      if(this.currentSong == -1)
+        return
+      var nextSong = this.currentSong + 1;
+      if(nextSong >= this.playList.length)
+        nextSong = 0;
+      this.playSong(this.playList.at(nextSong));
+    },
 
-  /**
-   * Initializes the music player.
-   */
-  ns.init = function(){
-    var audioPlayer = $('#audio-player');
-    ns.isPlaying = false;
-    ns.currentSong = null;
-    ns.currentSong = $('#song-list').firstElementChild;
-    if(ns.currentSong){
-      ns.currentSong.classList.add('selected-song');
-      ns.updateSongDisplay();
-      audioPlayer.addEventListener('ended', ns.songEnded);
-      ns.setPlayerSource(ns.currentSong.getAttribute('data-song_id'));
-      $('#play-button').addEventListener('click', ns.playPressed);
-      $('#previous-button').addEventListener('click', ns.previousPressed);
-      $('#next-button').addEventListener('click', ns.nextPressed);
-    }
-  };
+    /**
+     * Plays the given song after setting the previous song to not-playing.
+     */
+    playSong: function(song){
+      // Set the former song to not-playing.
+      this.playList.at(this.currentSong).set('isPlaying', false);
+      this.currentSong = this.playList.indexOf(song);
+      this.audioPlayer.pause();
+      // Set the new song to playing
+      this.audioPlayer.setAttribute('src', songUrlBase + song.id + '/audio');
+      song.set('isPlaying', true);
+      this.audioPlayer.play();
+      this.displaySongInfo(song);
+      this.updatePlayButton();
+    },
 
-  return ns;
-};
+    /**
+     * Displays the current song's info in the player.
+     */
+    displaySongInfo: function(song){
+      $('#current-song').text(song.get('title'));
+      $('#current-album').text(song.get('album'));
+      $('#current-artist').text(song.get('artist'));
+    },
+    
+    /**
+     * Render multiple songs with only one document reflow.
+     */
+    displaySongs: function(songCollection){
+      var songList = songCollection.models;
+      var fragment = document.createDocumentFragment();
+      for(var i=0; i<songList.length; ++i){
+        var songView = new SongView({model: songList[i]});
+        fragment.appendChild(songView.render().el);
+      }
+      $('#song-list').empty();
+      $('#song-list').append(fragment);
+    },
 
+    /**
+     * Display the main listing of songs.
+     */
+    viewSongs: function(){
+      $('#album-list').addClass('hidden');
+      $('#artist-list').addClass('hidden');
+      $('#song-list').removeClass('hidden');
+    },
+
+    /**
+     * Display the list of artists.
+     */
+    viewArtists: function(){
+      $('#album-list').addClass('hidden');
+      $('#song-list').addClass('hidden');
+      $('#artist-list').removeClass('hidden');
+    },
+
+    /**
+     * Display the list of albums.
+     */
+    viewAlbums: function(){
+      $('#artist-list').addClass('hidden');
+      $('#song-list').addClass('hidden');
+      $('#album-list').removeClass('hidden');
+    },
+  });
+
+  // Create a new music player and start the application.
+  var musicPlayer = new MusicPlayerView();
+});

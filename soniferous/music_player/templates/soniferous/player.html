@@ -4,12 +4,20 @@
 <script type="text/javascript" src="{% static 'soniferous/js/lib/zepto-min.js' %}"></script>
 <script type="text/javascript" src="{% static 'soniferous/js/lib/underscore-min.js' %}"></script>
 <script type="text/javascript" src="{% static 'soniferous/js/lib/backbone-min.js' %}"></script>
-<script type="text/javascript" src="{% static 'soniferous/js/music-player.js' %}"></script>
+<script type="text/javascript" src="{% static 'soniferous/js/models.js' %}"></script>
+<script type="text/javascript" src="{% static 'soniferous/js/views.js' %}"></script>
 {% endblock javascript %}
 {% block body %}
 {% include 'soniferous/menu-bar.html' %}
 
 {% autoescape off %}
+<script type="text/template" id="artist-template">
+  <span><%= artist %></span>
+</script>
+<script type="text/template" id="album-template">
+  <span><%= album %></span>
+  <span><%= artist %></span>
+</script>
 <script type="text/template" id="song-template">
   <span><%= title %></span>
   <span><%= artist %></span>

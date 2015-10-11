@@ -27,11 +27,12 @@ class Album(models.Model):
     Converts the Album to a dictionary that includes important information.
     Includes some information from foreign key fields.
     Return: The dictionary containing this Album's information.
-     { albums: [{ id: int, album: str, artist: str }, ...] }
+     { albums: [{ id: int, album: str, artist: str, artist_id: int }, ...] }
     '''
     album = {
      'id': self.pk,
      'album': self.album,
+     'artist_id': self.artist.pk,
      'artist': self.artist.artist,
     }
     return album
@@ -52,8 +53,8 @@ class Song(models.Model):
     Converts a single Song model to a dictionary with foreign key info added.
     Args: song - Song, the Song model to convert.
     Return: dict, the dict representing the song.
-     { artists: [{ id: int, title: str, track_number: int,
-      time: str, album: str, artist: str }, ...] }
+     { artists: [{ id: int, title: str, track_number: int, time: str,
+       album: str, album_id: int, artist: str, artist_id: int }, ...] }
     '''
     song = {
      'id': self.pk,
@@ -61,7 +62,9 @@ class Song(models.Model):
      'track_number': self.track_number,
      'time': self.time,
      'album': self.album.album,
+     'album_id': self.album.pk,
      'artist': self.album.artist.artist,
+     'artist_id': self.album.artist.pk,
     }
     return song
 

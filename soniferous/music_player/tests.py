@@ -65,18 +65,13 @@ class ViewTests(TestCase):
   def test_pages(self):
     '''Ensures that each page is rendering the appropriate data'''
     page_params = [
-     ('soniferous:player', 200, ['Title1', 'Album1', 'Artist1', 'Title2']),
-     ('soniferous:search', 200, ['Title1'], {'query': 'title1'}),
-     ('soniferous:song_list', 200, ['Title1', 'Album1', 'Artist1', 'Title2']),
-     ('soniferous:song_info', 200, ['Title1', 'Album1', 'Artist1'], {'pk':1}),
-     ('soniferous:song_search', 200, ['Title1',], {'query':'title1'}),
-     ('soniferous:album_list', 200, ['Album1', 'Album2']),
-     ('soniferous:album_songs', 200, ['Title1', 'Album1'], {'pk':1}),
-     ('soniferous:album_search', 200, ['Album1',], {'query': 'album1'}),
-     ('soniferous:artist_list', 200, ['Artist1', 'Artist2']),
-     ('soniferous:artist_albums', 200, ['Album1', 'Artist1'], {'pk':1}),
-     ('soniferous:artist_songs', 200, ['Title1', 'Artist1'], {'pk':1}),
-     ('soniferous:artist_search', 200, ['Artist1'], {'query':'artist1'}),
+     ('soniferous:player', 200, ['Soniferous']),
+     ('soniferous:songs', 200, ['Title1', 'Album1', 'Artist1', 'Title2']),
+     ('soniferous:songs', 200, ['Title1', 'Album1', 'Artist1'], {'pk':1}),
+     ('soniferous:albums', 200, ['Album1', 'Album2']),
+     ('soniferous:albums', 200, ['Title1', 'Album1'], {'pk':1}),
+     ('soniferous:artists', 200, ['Artist1', 'Artist2']),
+     ('soniferous:artists', 200, ['Title1', 'Artist1'], {'pk':1}),
     ]
     for params in page_params:
       self.user_page_contains(*params)
@@ -103,7 +98,7 @@ class ViewTests(TestCase):
       self.assertEqual(response.status_code, 200)
       self.assertTrue(test_word.encode() in response.content,\
        msg='Song {0} info missing.'.format(file_name))
-      self.user_page_contains('soniferous:song_list', 200, [test_word])
+      self.user_page_contains('soniferous:songs', 200, [test_word])
 
   def song_files(self):
     '''

@@ -32,19 +32,15 @@ If the tests passed, then intialize the database (it may ask a few questions to 
     python3 manage.py syncdb
     python3 manage.py collectstatic
 
-### uWSGI ###
+Soniferous should now be set up to run on any WSGI server.
 
-A sample configuration file is provided for a running Soniferous under uWSGI if it is installed. Execute the following command from the root of this project to start serving the application:
+## WSGI Servers ##
 
-    uwsgi --ini uwsgi.ini
+Soniferous should be compatible with any WSGI server. The application entry point is `soniferous.wsgi` , and the application working directory should be set to `Soniferous/soniferous`. It has been tested on Gunicorn, mod_wsgi, uWSGI, and Django's built-in server.
 
-### Other WSGI Servers ###
-
-To use Soniferous on Apache and other WSGI servers, consult the official Django documentation for configuration steps. Since Soniferous is designed to be WSGI compatible, most servers should work properly.
+Note that uWSGI will occasionally generate a Content-Length mismatch error while serving music, which can cause skips in playback. This error has not be reproducible on any other WSGI servers.
 
 ## Usage ##
-
-Open up a _modern_ browser and connect to the server at: http://127.0.0.1:9001 . Sign in with the super user account created, and it should be ready to go.
 
 ### Adding Music ###
 

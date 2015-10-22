@@ -38,8 +38,6 @@ Soniferous should now be set up to run on any WSGI server.
 
 Soniferous should be compatible with any WSGI server. The application entry point is `soniferous.wsgi` , and the application working directory should be set to `Soniferous/soniferous`. It has been tested on Gunicorn, mod_wsgi, uWSGI, and Django's built-in server.
 
-Note that uWSGI will occasionally generate a Content-Length mismatch error while serving music, which can cause skips in playback. This error has not be reproducible on any other WSGI servers.
-
 ## Usage ##
 
 ### Adding Music ###

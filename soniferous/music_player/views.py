@@ -3,6 +3,7 @@ import re
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.decorators import method_decorator
@@ -59,6 +60,7 @@ class SongView(View):
       return JsonResponse(json_list('songs', songs))
 
   @method_decorator(staff_member_required)
+  @method_decorator(transaction.atomic)
   def delete(self, request, pk):
     '''
     Deletes the given song. Any associated artists or albums that are no

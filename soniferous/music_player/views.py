@@ -80,8 +80,6 @@ class SongView(View):
     partial files can be sent to the user instead of a bulk transfer.
     '''
     block_size = 4096
-    # Automatically serve 1MB to the user unless requested otherwise
-    range_auto_limit = 1048576
     song = get_object_or_404(Song, pk=pk)
     song.music_file.open()
     # Attempt to serve partial ranges if necessary
@@ -94,8 +92,7 @@ class SongView(View):
       if ranges[1]:
         stop_range = int(ranges[1])
       else:
-        stop_range = \
-         min(start_range + range_auto_limit, song.music_file.size - 1)
+        stop_range = song.music_file.size - 1
       # Valid ranges get data served
       if len(ranges) == 2 and (0 <= stop_range < song.music_file.size):
         file_wrapper = file_range_generator(\

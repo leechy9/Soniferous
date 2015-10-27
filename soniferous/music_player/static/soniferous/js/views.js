@@ -305,7 +305,7 @@ $(document).ready(function(){
      * after input has completed.
      */
     displaySearchSongs: _.debounce(function(){
-      var query = this.searchBar.val();
+      var query = this.searchBar.val().toLocaleLowerCase();
       this.displayList.reset(
         this.songList.filter(function(song){
           if(song.get('title').toLocaleLowerCase().indexOf(query) != -1)

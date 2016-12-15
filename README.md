@@ -7,7 +7,7 @@ Soniferous is a simple html music-player built on top of Django. It has a respon
 The following dependencies must be met at a minimum:
 
 + Python 3.4
-+ Django 1.7
++ Django 1.10
 + Mutagen 1.27
 
 While Soniferous may work with previous versions of these software dependencies, they are not officially supported.
@@ -29,7 +29,8 @@ Test to ensure the dependencies are met:
 
 If the tests passed, then intialize the database (it may ask a few questions to create a superuser) and set up the rest of the application:
 
-    python3 manage.py syncdb
+    python3 manage.py createsuperuser
+    python3 manage.py migrate --run-syncdb
     python3 manage.py collectstatic
 
 Soniferous should now be set up to run on any WSGI server.

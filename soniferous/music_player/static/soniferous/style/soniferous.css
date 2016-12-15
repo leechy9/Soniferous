@@ -50,6 +50,7 @@ ul {
   position: fixed;
   top: 40px;
   width: 100%;
+  will-change: transform;
 }
 #menu-bar {
   background-color: #222;
@@ -57,6 +58,7 @@ ul {
   height: 40px;
   position: fixed;
   width: 100%;
+  will-change: transform;
   z-index: 2;
 }
 #menu-bar > h1 {

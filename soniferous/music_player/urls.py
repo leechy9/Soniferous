@@ -1,25 +1,21 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
+import django.contrib.auth.views as django_auth
 
 from music_player import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Misc
     url(r'^$', views.player, name='player'),
     # Login 
-    url(r'^login$', 'django.contrib.auth.views.login', \
+    url(r'^login$', django_auth.login,
      {'template_name':'soniferous/login.html'}, name='login'),
     # Password
-    url(r'^password$',
-     'django.contrib.auth.views.password_change',\
-     {
-      'template_name':'soniferous/password.html',\
+    url(r'^password$', django_auth.password_change, {
+      'template_name':'soniferous/password.html',
       'post_change_redirect':'soniferous:logout'
-     },\
-     name='password'),
+     }, name='password'),
     # Logout
-    url(r'^logout$',\
-     'django.contrib.auth.views.logout_then_login',\
-     name='logout'),
+    url(r'^logout$', django_auth.logout_then_login, name='logout'),
     # Songs
     url(r'^song(?:/(?P<pk>\d+))?/?$', views.SongView.as_view(), name='songs'),
     url(r'^song/(?P<pk>\d+)/audio$', views.SongView.audio),
@@ -29,4 +25,4 @@ urlpatterns = patterns('',
     # Artists
     url(r'^artist(?:/(?P<pk>\d+))?/?$',
      views.ArtistView.as_view(), name='artists'),
-)
+]

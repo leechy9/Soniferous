@@ -29,9 +29,9 @@ Test to ensure the dependencies are met:
 
 If the tests passed, then intialize the database (it may ask a few questions to create a superuser) and set up the rest of the application:
 
-    python3 manage.py createsuperuser
     python3 manage.py migrate --run-syncdb
-    python3 manage.py collectstatic
+    python3 manage.py createsuperuser
+    python3 manage.py collectstatic --noinput
 
 Soniferous should now be set up to run on any WSGI server.
 
